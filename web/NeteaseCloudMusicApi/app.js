@@ -240,12 +240,11 @@ app.use("/user/record", require("./router/user_playrecord"))
 
 
 
-const port = process.env.PORT || 3000
+// const port = process.env.PORT || 3000
+const port = process.env.PORT || 80
 
 app.listen(port, () => {
   console.log(`server running @${port}`)
 })
-
-app.listen(80,"106.15.199.249")
 
 module.exports = app
