@@ -15,7 +15,7 @@
 
 [sqaiyan/netmusic-node](https://github.com/sqaiyan/netmusic-node)
 
-
+## 使用 pm2 后台运行
 ## 版本新特性
 ### 2.6.2 | 2017.7.16
 修复垃圾桶接口

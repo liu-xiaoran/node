@@ -1,7 +1,11 @@
 const express = require('express')
 const http = require('http')
 const app = express()
-
+const fs = require('fs')
+const https = require('https')
+const privateKey  = fs.readFileSync('./path/to/214227896350347.key', 'utf8');
+const certificate = fs.readFileSync('./path/to/214227896350347.crt', 'utf8');
+const credentials = {key: privateKey, cert: certificate};
 // 跨域设置
 // app.all('*', function (req, res, next) {
 //   res.header("Access-Control-Allow-Credentials", true)
@@ -238,7 +242,11 @@ app.use('/user/subcount', require('./router/user_subcount'))
 
 app.use("/user/record", require("./router/user_playrecord"))
 
+const httpsServer = https.createServer(credentials,app)
 
+httpsServer.listen(443,() =>{
+    console.log(`https running @${443}`)
+})
 
 // const port = process.env.PORT || 3000
 const port = process.env.PORT || 80
