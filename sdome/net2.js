@@ -24,8 +24,10 @@ function broadcast(message,client){
 
 // 链接服务器
 chatServer.on('connection',function(client){
-    client.name = client.remoteAddress+':'+client.remotePort
-    client.write('Hi'+client.name+'!\n')
+    client.name = client.remoteAddress+':'+client.remotePort;
+    client.write('Hi'+client.name+'!\n');
+    console.log(client.name+' joined')
+
     clientList.push(client)
 
     client.on('data',function(data){
@@ -33,7 +35,11 @@ chatServer.on('connection',function(client){
     })
     //关闭时移除该客户端
     client.on('end',function(){
+        console.log(client.name+' quit')
         clientList.splice(clientList.indexOf(client),1)
+    })
+    client.on('error',function(e){
+        console.log(e)
     })
 
 }).listen(8080)
