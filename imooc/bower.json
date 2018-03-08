@@ -1,0 +1,21 @@
+{
+  "name": "imooc",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "liuxiaoran <mk9540@163.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/liu-xiaoran/node",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.3.1"
+  }
+}
