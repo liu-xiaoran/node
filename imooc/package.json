@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "moment": "^2.21.0",
     "mongoose": "^5.0.9",
