@@ -8,7 +8,7 @@ var bodyParser = require('body-parser')
 app.set('views','./views/pages');
 app.set('view engine','pug');
 app.use(bodyParser());
-// app.use(express.static(path.join(__dirname,'bower_components')));
+app.use(express.static(path.join(__dirname,'bower_components')));
 app.listen(port);
 
 console.log("starred on: "+port);
