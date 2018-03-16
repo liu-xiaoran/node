@@ -15,7 +15,7 @@ console.log("starred on: "+port);
 //add route
 app.get('/',function(req,res){
     res.render('index',{
-        title: 'imooc homePage',
+        title: '小然电影网',
         movies: [
             {
                 title:"机械哈哈",
@@ -47,7 +47,7 @@ app.get('/',function(req,res){
 })
 app.get('/admin/list',function(req,res){
     res.render('list',{
-        title: 'imooc listPage',
+        title: '列表',
         movies:[
             {
                 title:'包包',
@@ -57,7 +57,7 @@ app.get('/admin/list',function(req,res){
                 year:2014,
                 poster:'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2510956726.webp',
                 language:'英语',
-                video:'http://vt1.doubanio.com/201803131120/f4a3b0291d3606bbae91158be210d24b/view/movie/M/302260016.mp4',
+                video:'http://liuxiaoran.win/video/aa.mp4',
                 summary:'本片以习近平新时代中国特色社会主义思想为内在逻辑，展示了在创新、协调、绿色、开放'
             }
         ]
@@ -65,7 +65,7 @@ app.get('/admin/list',function(req,res){
 })
 app.get('/detail/:id',function(req,res){
     res.render('detail',{
-        title: 'imooc detailPage',
+        title: '电影详情',
         movie:{
             doctor:'刘小然',
             country:'天朝',
@@ -80,7 +80,7 @@ app.get('/detail/:id',function(req,res){
 })
 app.get('/admin/movie',function(req,res){
     res.render('admin',{
-        title: 'imooc adminPage',
+        title: '管理',
         movie:{
             title:'',
             doctor:'',
