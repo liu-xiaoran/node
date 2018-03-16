@@ -6,18 +6,18 @@ block content
             each item in movies
                 .col-md-7
                     video(width="720", height="600", controls)
-                        source(src= movie.video type="video/mp4")
+                        source(src= item.video type="video/mp4")
                     .col-md-5
                         dl.dl-horizontal
                             dt 电影名字
-                            dd= movie.title
+                            dd= item.title
                             dt 导演
-                            dd= movie.doctor
+                            dd= item.doctor
                             dt 国家
-                            dd= movie.country
+                            dd= item.country
                             dt 语言
-                            dd= movie.language
+                            dd= item.language
                             dt 上映年份
-                            dd= movie.year
+                            dd= item.year
                             dt 简介
-                            dd= movie.summary
+                            dd= item.summary
