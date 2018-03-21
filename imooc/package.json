@@ -14,5 +14,6 @@
     "moment": "^2.21.0",
     "mongoose": "^5.0.9",
     "pug": "^2.0.0"
-  }
+  },
+  "dependencies": {}
 }
