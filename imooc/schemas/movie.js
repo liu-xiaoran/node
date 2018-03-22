@@ -1,3 +1,5 @@
+import { exec } from 'child_process';
+
 var mongoose = require('mongoose');
 
 var MovieSchema = new mongoose.Schema({
@@ -31,5 +33,17 @@ MovieSchema.pre('save',function(next){
 })
 
 MovieSchema.statics = {
-    
+    fetch: function(cb){
+        return this
+        .find({})
+        .sort('meta.updateAt')
+        exec(cb)
+    },
+    findById: function(id,cb){
+        return this
+        .findOne({_id:id})
+        exec(cb)
+    }
 }
+
+module.exports = MovieSchema

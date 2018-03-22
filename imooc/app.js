@@ -15,6 +15,7 @@ app.listen(port);
 
 console.log("starred on: "+port);
 //add route
+
 app.get('/',function(req,res){
     res.render('index',{
         title: '小然电影网',
