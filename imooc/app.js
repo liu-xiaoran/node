@@ -1,5 +1,9 @@
 var express = require("express");
 var path = require('path');
+//链接本地数据库
+var mongoose = require('mongoose')
+mongoose.connect('mongodb://')
+
 var port = process.env.PORT || 3000;
 var app = express() ;
 
