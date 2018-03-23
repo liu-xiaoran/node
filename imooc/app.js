@@ -1,90 +1,54 @@
 var express = require("express");
+var app = express() ;
+
 var path = require('path');
 //链接本地数据库
 var mongoose = require('mongoose')
-mongoose.connect('mongodb://')
+mongoose.connect('mongodb://localhost:27017/imooc')
+console.log('MongoDB connection success!');
 
-var port = process.env.PORT || 3000;
-var app = express() ;
+var Movie = require('./models/movie')
 
-var bodyParser = require('body-parser')
-
+app.locals.moment = require('moment')
 app.set('views','./views/pages');
 app.set('view engine','pug');
-app.use(bodyParser());
 
-app.use(express.static(path.join(__dirname,'bower_components')));
+var bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended:true}))
 
+var _underscore = require('underscore')
+
+app.use(express.static(path.join(__dirname,'public')));
+
+var port = process.env.PORT || 3000;
 app.listen(port);
 
 console.log("starred on: "+port);
 //add route
 
 app.get('/',function(req,res){
-    res.render('index',{
-        title: '小然电影网',
-        movies: [
-            {
-                title:"机械哈哈",
-                _id:1,
-                poster:'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2510956726.webp'
-            },
-            {
-                title:"hhah哈哈",
-                _id:2,
-                poster:'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2510956726.webp'
-            },
-            {
-                title:"哈哈哈哈",
-                _id:3,
-                poster:'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2510956726.webp'
-            },
-            {
-                title:"233333",
-                _id:4,
-                poster:'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2510956726.webp'
-            },
-            {
-                title:"小萝莉",
-                _id:5,
-                poster:'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2510956726.webp'
-            },
-        ]
-    })
-})
-app.get('/admin/list',function(req,res){
-    res.render('list',{
-        title: '列表',
-        movies:[
-            {
-                title:'包包',
-                _id:1,
-                doctor:'xiaorn',
-                country:'美国',
-                year:2014,
-                poster:'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2510956726.webp',
-                language:'英语',
-                video:'http://liuxiaoran.win/video/aa.mp4',
-                summary:'本片以习近平新时代中国特色社会主义思想为内在逻辑，展示了在创新、协调、绿色、开放'
-            }
-        ]
-    })
-})
-app.get('/detail/:id',function(req,res){
-    res.render('detail',{
-        title: '电影详情',
-        movie:{
-            doctor:'刘小然',
-            country:'天朝',
-            title:'哈哈哈',
-            year:2016,
-            poster:'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p2512123434.webp',
-            language:'英语',
-            video:'http://liuxiaoran.win/video/aa.mp4',
-            summary: '本片以习近平新时代中国特色社会主义思想为内在逻辑，展示了在创新、协调、绿色、开放和共享的新发展理念下中国这五年的伟大成就，展现了中国人民在全面建设小康征程上的伟大奋斗，彰显了以习近平同志为核心的党中央的正确领导。凝聚起全党全国人民的磅礴力量，为实现中华民族伟大复兴的中国梦不断前进。 '
+    Movie.fetch(function(err,movies){
+        if(err){
+            console.log(err);
         }
+        res.render('index',{
+            title: '小然电影网',
+            movies:movies
+        })
+    })    
+})
+
+app.get('/detail/:id',function(req,res){
+    var id = req.params.id
+
+    Movie.findById(id,function(err,movie){
+        res.render('detail',{
+            title:movie.title,
+            movie:movie
+        })
     })
 })
+
 app.get('/admin/movie',function(req,res){
     res.render('admin',{
         title: '管理',
@@ -100,3 +64,88 @@ app.get('/admin/movie',function(req,res){
         }
     })
 })
+
+app.get('/admin/list',function(req,res){
+
+    Movie.fetch(function(err,movies){
+        if(err){
+            console.log(err);
+        }
+
+        res.render('list',{
+            title: '列表',
+            movies:movies
+        })
+    })    
+})
+app.get('/admin/update/:id',function(req,res){
+    var id = req.params.id
+
+    if(id){
+        Movie.findById(id,function(err,movie){
+            res.render('admin',{
+                title:'后台更新页',
+                movie:movie
+            })
+        })
+    }
+})
+
+
+// admin post movie
+app.post('/admin/movie/new',function(req,res){
+    var id = req.body.movie._id
+    var movieObj = req.body.movie
+    var _movie = null;
+    
+    if(id){
+        Movie.findById(id,function(err,movie){
+            if(err){
+                console.log(err);
+            }
+
+            _movie = _underscore.extend(movie,movieObj)
+            _movie.save(function(err,movie){
+                if(err){
+                    console.log('更新错误');
+                    console.log(err);
+                }
+
+                res.redirect('/detail/'+movie._id)
+            })
+        })
+    }else{
+        _movie = new Movie({
+            doctor: movieObj.doctor,
+            title: movieObj.title,
+            country: movieObj.country,
+            year: movieObj.year,
+            poster: movieObj.poster,
+            video: movieObj.video,
+            summary: movieObj.summary,
+            language: movieObj.language
+        })
+
+        _movie.save(function(err,movie){
+            if(err){
+                console.log('存储错误');
+                console.log(err);
+            }
+
+            res.redirect('/detail/'+movie._id)
+        })
+    }
+})
+
+app.delete('/admin/list', function (req, res) {
+    var id = req.query.id;
+    if (id) {
+        Movie.remove({_id: id}, function (err, movie) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json({success: 1});
+            }
+        });
+    }
+});
